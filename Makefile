@@ -14,9 +14,7 @@ cp:
 
 cp-dev:
 	git submodule update --init --recursive
-	cd frontend
-	git switch develope
-	cd ..
+	cd frontend && git switch develop
 	cp ./.env.sample ./backend/.env
 	cp ./[FE-dev]Dockerfile ./frontend/Dockerfile
 	cp ./[BE-dev]Dockerfile ./backend/Dockerfile
