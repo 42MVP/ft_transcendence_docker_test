@@ -1,0 +1,77 @@
+version: '3'
+
+services:
+  front:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: transcendence-front
+    container_name: transcendence-front
+    environment:
+      VUE_APP_SERVER_URL: ${VUE_APP_SERVER_URL:-http://localhost:3001}
+    expose: 
+      - 80
+    ports:
+      - 80:80
+    networks:
+      - transcendence
+    depends_on:
+      - backend
+
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    image: transcendence-back
+    container_name: transcendence-back
+    env_file:
+      - ./backend/.env
+    expose: 
+      - 3000 
+    ports:
+      - 3000:3000
+    volumes:
+      - uploads_volumes:/app/uploads
+    networks:
+      - transcendence
+    depends_on:
+      - db
+
+
+  db:
+    image: postgres:alpine
+    container_name: postgres
+    env_file:
+      - ./backend/.env
+    restart: always
+    volumes:
+      - db_volumes:/var/lib/postgresql/data
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    networks:
+      - transcendence
+
+
+networks:
+  transcendence:
+    driver: bridge 
+
+
+volumes:
+  db_volumes:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/${USER}/transcendence/data/postgresql/
+
+
+  uploads_volumes:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /home/${USER}/transcendence/data/upload/
