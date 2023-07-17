@@ -11,8 +11,12 @@ services:
       VUE_APP_SERVER_URL: ${VUE_APP_SERVER_URL:-http://localhost:3001}
     expose: 
       - 80
+      - 5173
     ports:
       - 80:80
+      - 5173:5173 # dev
+    volumes:
+      - ./frontend/src:/app/src # dev
     networks:
       - transcendence
     depends_on:
