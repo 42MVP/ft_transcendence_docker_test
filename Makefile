@@ -1,63 +1,78 @@
 NAME = ft_transcendence
 
 # Check your env_file
-# cp /home/${USER}/ft_transcendence/backend/.env ./
+# cp ${HOME}/ft_transcendence/backend/.env ./
 
 all: build
 
+# NOTE - ft_transcendece에 정식 등록 전까지 make cp 대체
 cp:
 	git submodule update --init --recursive
 	cp ./.env.sample ./backend/.env
 	cp ./nginx.conf ./frontend/nginx.conf
-	cp ./[FE]Dockerfile ./frontend/Dockerfile
-	cp ./[BE]Dockerfile ./backend/Dockerfile
+	cp ./Dockerfile.front ./frontend/Dockerfile
+	cp ./Dockerfile.back ./backend/Dockerfile
 
-cp-dev:
-	git submodule update --init --recursive
-	cd frontend && git switch develop
-	cp ./.env.sample ./backend/.env
-	cp ./[FE-dev]Dockerfile ./frontend/Dockerfile
-	cp ./[BE-dev]Dockerfile ./backend/Dockerfile
+dev:
+	@echo "🏗️  Building ${NAME}-dev ...\n"
+	@cd frontend && git switch develop
+	@mkdir -p ${HOME}/transcendence/data/upload
+	@mkdir -p ${HOME}/transcendence/data/postgresql
+	@mkdir -p ${HOME}/transcendence/data/postgresql-log
+	@docker compose -f .docker/docker-compose.yml up --build
 
 build:
-	@echo "Building ${NAME} ...\n"
-	@mkdir -p /home/${USER}/transcendence/data/upload
-	@mkdir -p /home/${USER}/transcendence/data/postgresql
-	@mkdir -p /home/${USER}/transcendence/data/postgresql-log
-	@docker compose -f ./docker-compose.yml up --build
+	@echo "🏗️  Building ${NAME} ...\n"
+	@mkdir -p ${HOME}/transcendence/data/upload
+	@mkdir -p ${HOME}/transcendence/data/postgresql
+	@mkdir -p ${HOME}/transcendence/data/postgresql-log
+	@docker compose -f docker-compose.yml up --build
 
 up:
-	@echo "Starting ${NAME} ...\n"
-	@mkdir -p /home/${USER}/transcendence/data/upload
-	@mkdir -p /home/${USER}/transcendence/data/postgresql
-	@mkdir -p /home/${USER}/transcendence/data/postgresql-log
+	@echo "🔺  Starting ${NAME} ...\n"
+	@mkdir -p ${HOME}/transcendence/data/upload
+	@mkdir -p ${HOME}/transcendence/data/postgresql
+	@mkdir -p ${HOME}/transcendence/data/postgresql-log
 	@docker compose -f ./docker-compose.yml up
 
+dev-up:
+	@echo "🔺  Starting ${NAME}-dev ...\n"
+	@mkdir -p ${HOME}/transcendence/data/upload
+	@mkdir -p ${HOME}/transcendence/data/postgresql
+	@mkdir -p ${HOME}/transcendence/data/postgresql-log
+	@docker compose -f .docker/docker-compose.yml up
+
 start:
-	@echo "Starting ${NAME} ...\n"
+	@echo "💨  Starting ${NAME} ...\n"
 	@docker compose -f ./docker-compose.yml start
 
 stop:
-	@echo "Stopping ${NAME} ...\n"
+	@echo "🛑  Stopping ${NAME} ...\n"
 	@docker compose -f ./docker-compose.yml stop
 
 down:
-	@echo "Shuting Down ${NAME} ...\n"
+	@echo "🔻  Shuting Down ${NAME} ...\n"
 	@docker compose -f ./docker-compose.yml down
 
-clear:
-	@su -c 'rm -rf /home/${USER}/transcendence/data'
+dev-down:
+	@echo "🔻  Shuting Down ${NAME}-dev ...\n"
+	@docker compose -f .docker/docker-compose.yml down
 
-clean: down clear
-	@echo "Cleaning ${name} ...\n"
-	@docker volume rm ft_transcendence_test_db_volumes ft_transcendence_test_uploads_volumes
-
-fclean: clear
-	@echo "Total Cleaning ...\n"
+stop-all:
 	@docker stop $$(docker ps -aq)
+
+clear:
+	@sudo rm -rf ${HOME}/transcendence
+
+clean: down
+	@echo "🧹  Cleaning ${name} ... (keep images)\n"
+	@docker volume rm ft_tsen_db_volumes ft_tsen_uploads_volumes
+
+fclean: clean
+	@echo "🧼  Total Cleaning ...\n"
 	@docker system prune --all --force --volumes
 	@docker network prune --force
-	@docker volume rm ft_transcendence_test_db_volumes ft_transcendence_test_uploads_volumes
+	@echo "📢  To delete data: make clear\n"
 
 re: fclean all
 

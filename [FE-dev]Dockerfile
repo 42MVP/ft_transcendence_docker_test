@@ -1,9 +1,0 @@
-FROM node:18-alpine3.16 AS builder
-
-WORKDIR /app
-
-COPY . .
-
-RUN npm ci
-
-ENTRYPOINT ["npm", "run", "dev", "--", "--host"]
