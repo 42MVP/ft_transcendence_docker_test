@@ -47,3 +47,10 @@
 	- 도커 볼륨 삭제 : `make clean`
 	- 도커 이미지, 도커 볼륨, 도커 네트워크 삭제 : `make fclean`
 	- 도커 이미지, 도커 볼륨, 도커 네트워크 삭제 후 production 모드 build : `make re`
+
+## 기타 문제 사항
+
+- develop 모드에서 mount 에러시 해결법
+	- [에러] 대충 `mkdir /Users/chaejkim/goinfre/ft_transcendence_docker_test/frontend/src` 실패 어쩌고 뜨는 경우
+	- [해결법] docker desktop > ⚙️ > Resources > File sharing 에서 해당 경로 등록
+		- ![File sharing 경로 추가](./image/docker_desktop_file_sharing.png)
