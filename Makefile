@@ -64,7 +64,7 @@ stop-all:
 clear:
 	@sudo rm -rf ${HOME}/transcendence
 
-clean: down
+clean: down dev-down
 	@echo "🧹  Cleaning ${name} ... (keep images)\n"
 	@docker volume rm ft_tsen_db_volumes ft_tsen_uploads_volumes
 
