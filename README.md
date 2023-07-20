@@ -4,7 +4,7 @@
 
 ## 사용법
 
-1. 클론 후, 서브모듈에 Dockerfile 과 nginx config 파일 복사
+1. 클론 후, 서브모듈에 Dockerfile 과 nginx config 파일 복사  
 	```
 	git clone --recursive git@github.com:42MVP/ft_transcendence_docker_test.git
 	make cp
@@ -16,31 +16,31 @@
 
 2. 도커 이미지 빌드 및 컨테이너 실행
 
-2.1 develope 모드 사용시
-	- build
+	- 2.1 develope 모드 사용시
+		- build   
 		```
-		make dev
+		make dev  
 		```
-	- up, down, stop, start
+		- up, down, stop, start    
 		```
-		make dev-up
-		make dev-down
-		make dev-stop
-		make dev-start
+		make dev-up  
+		make dev-down  
+		make dev-stop  
+		make dev-start  
 		```
-
-2.2 production 모드 사용시
-	- build
-		```
-		make build
-		```
-	- up, down, stop, start
-		```
-		make up
-		make down
-		make stop
-		make start
-		```
+	
+	- 2.2 production 모드 사용시
+		- build
+			```
+			make build
+			```
+		- up, down, stop, start
+			```
+			make up
+			make down
+			make stop
+			make start
+			```
 
 3. 기타 명령어
 	- bind 된 volume 삭제 : `make clear` (파일 소유자가 docker container의 유저 이므로, sudo 권한 필요)
